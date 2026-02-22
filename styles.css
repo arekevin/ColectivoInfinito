@@ -111,7 +111,7 @@ select:hover {
 ========================= */
 #productos {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 10px;
   padding: 20px;
   max-width: 1200px;
@@ -137,7 +137,8 @@ select:hover {
 
 .card img {
   width: 100%;
-  height: 210px;
+  aspect-ratio: 1/1;
+  /* height: 210px; */
   object-fit: cover;
   object-position: center center;
   margin-bottom: 5px;
@@ -204,6 +205,7 @@ select:hover {
 
   .header-right {
     right: 20px;
+    gap: 9px;
   }
 
   .logo {
@@ -216,8 +218,8 @@ select:hover {
   }
 
   .header-right img {
-    width: 35px;
-    height: 35px;
+    width: 30px;
+    height: 30px;
   }
 
   #productos {
