@@ -2,125 +2,102 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Catálogo de Productos</title>
+  <title>Foxlab Co. | Catálogo Oficial</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Colecciones oficiales de Foxlab Co. Compra y personaliza tus prendas favoritas.">
   <link rel="stylesheet" href="styles.css">
-
-  <!-- <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background-color: #f4f4f4;
-    }
-
-    header {
-      background: #000;
-      color: #fff;
-      text-align: center;
-      padding: 20px;
-    }
-
-    .filtros {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      padding: 15px;
-      background: #fff;
-      flex-wrap: wrap;
-    }
-
-    select {
-      padding: 8px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
-
-    #productos {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
-      padding: 20px;
-    }
-
-    .card {
-      background: #fff;
-      border-radius: 8px;
-      padding: 15px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      text-align: center;
-    }
-
-    .card img {
-      width: 100%;
-      height: 210px;
-      object-fit: cover;
-    }
-
-    .precio {
-      font-size: 18px;
-      font-weight: bold;
-    }
-
-    .btn {
-      display: inline-block;
-      padding: 8px 12px;
-      background: #000;
-      color: #fff;
-      border-radius: 5px;
-      text-decoration: none;
-      margin-top: 5px;
-    }
-
-    .btn:hover {
-      background: #333;
-    }
-  </style> -->
+  <link rel="icon" href="/favicon.ico">
 </head>
+
 <body>
 
 <header class="header">
 
   <div class="header-left">
-    <img src="/assets/logo.jpg" alt="Logo" class="logo">
+    <img src="/assets/logo.png" alt="Logo FoxLab Co." class="logo" id="logoTop">
   </div>
 
   <div class="header-center">
-    <h1>BRAVE STORE</h1>
+    <h1>FoxLab Co.</h1>
   </div>
 
   <div class="header-right">
-    <a href="https://instagram.com/tennis_brave_store/" target="_blank">
+    <a href="https://instagram.com/foxlabco/" target="_blank">
       <img src="/assets/instagram.png" alt="Instagram">
     </a>
 
-    <a href="https://whatsapp.com/channel/TU_CANAL" target="_blank">
+    <a href="https://wa.me/573126161008" target="_blank">
       <img src="/assets/whatsapp.png" alt="WhatsApp">
     </a>
+
+    <div class="carrito-icono" onclick="abrirCarrito()">
+      🛒 <span id="contadorCarrito">0</span>
+    </div>
   </div>
 
 </header>
 
-<div class="filtros">
-  <select id="filtroCategoria">
-    <option value="todos">Todas las categorías</option>
-    <option value="Zapatos">Zapatos</option>
-    <option value="Camisetas">Camisetas</option>
-  </select>
 
-  <select id="filtroMarca">
-    <option value="todos">Todas las marcas</option>
-  </select>
+<section class="colecciones">
+  <button onclick="filtrarColeccion('todas')">Todas</button>
+  <button onclick="filtrarColeccion('Salsa Caleña')">Salsa Caleña</button>
+  <button onclick="filtrarColeccion('DSC')">Diciembre Social Club</button>
+  <button onclick="filtrarColeccion('El Amor Está en el Aire')">El Amor Está en el Aire</button>
+  <button onclick="mostrarEstudio()">Foxlab Estudio Creativo</button>
+</section>
 
-  <select id="filtroGenero">
-    <option value="todos">Todos los géneros</option>
-    <option value="Hombre">Hombre</option>
-    <option value="Dama">Dama</option>
-    <option value="Unisex">Unisex</option>
-  </select>
+
+<main>
+  <div id="productos" class="grid-productos"></div>
+
+  <div class="paginacion">
+    <button onclick="paginaAnterior()">Anterior</button>
+    <span id="paginaActual">1</span>
+    <button onclick="paginaSiguiente()">Siguiente</button>
+  </div>
+</main>
+
+
+<!-- CARRITO -->
+<div id="carritoOverlay" class="carrito-overlay" onclick="cerrarCarrito()"></div>
+
+<div id="carritoPanel" class="carrito-panel">
+  <h2>Tu Pedido</h2>
+  <div id="listaCarrito"></div>
+  <div class="carrito-total">
+    Total: $<span id="totalCarrito">0</span>
+  </div>
+  <button class="btn-enviar" onclick="enviarPedidoWhatsApp()">Enviar por WhatsApp</button>
+  <button class="btn-cerrar" onclick="cerrarCarrito()">Cerrar</button>
 </div>
 
-<div id="productos"></div>
 
+<!-- MODAL IMAGEN -->
+<div id="modalImagen" class="modal-imagen">
+  <span class="cerrar-modal" onclick="cerrarModal()">×</span>
+  <img id="imagenGrande">
+</div>
+
+
+<!-- ESTUDIO CREATIVO -->
+<section id="estudioCreativo" class="estudio-oculto">
+  <h2>Foxlab Estudio Creativo</h2>
+  <p>Personaliza tus prendas con diseños exclusivos.</p>
+  <button onclick="window.open('https://wa.me/573126161008?text=Hola%20Foxlab%20👋%20quiero%20personalizar%20una%20prenda','_blank')">
+    Personalizar ahora
+  </button>
+</section>
+
+
+<footer class="footer">
+  <div class="footer-content">
+    <img src="/assets/logof.png" alt="Foxlab Logo" class="footer-logo">
+    <p>© 2026 Foxlab Co. Todos los derechos reservados.</p>
+    <p class="credito">Website desarrollado por Foxlab Studio</p>
+  </div>
+</footer>
+<div id="toast" class="toast">Producto agregado al carrito 🛒</div>
 <script src="script.js"></script>
+
 </body>
 </html>
