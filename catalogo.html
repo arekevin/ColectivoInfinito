@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Foxlab Co. | Catálogo Oficial</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Colecciones oficiales de Foxlab Co. Compra y personaliza tus prendas favoritas.">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="/favicon.ico">
+</head>
+
+<body>
+
+<header class="header">
+
+  <a href="/index.html" class="header-left">
+    <img src="/assets/logo.png" alt="Logo FoxLab Co." class="logo" id="logoTop">
+  </a>
+
+  <div class="header-center">
+    <h1>FoxLab Co.</h1>
+  </div>
+
+  <div class="header-right">
+    <a href="https://instagram.com/foxlabco/" target="_blank">
+      <img src="/assets/instagram.png" alt="Instagram">
+    </a>
+
+    <a href="https://wa.me/573126161008" target="_blank">
+      <img src="/assets/whatsapp.png" alt="WhatsApp">
+    </a>
+
+    <div class="carrito-icono" onclick="abrirCarrito()">
+      🛒 <span id="contadorCarrito">0</span>
+    </div>
+  </div>
+
+</header>
+<section class="colecciones">
+  <button onclick="mostrarProductos('todas', this)" class="active">Todas</button>
+  <button onclick="mostrarProductos('salsa', this)">Salsa&Sazón</button>
+  <button onclick="mostrarProductos('dsc', this)">Diciembre Social Club</button>
+  <button onclick="mostrarProductos('amor', this)">Hecho con amor</button>
+  <button onclick="mostrarProductos('tropical', this)">Tropical Mind</button>
+  <button onclick="mostrarProductos('solar', this)">Sun Vibes</button>
+  <button onclick="mostrarProductos('fox', this)">Foxlab Dsgn</button>
+</section>
+
+
+<main>
+  <div id="productos" class="grid-productos"></div>
+
+  <div class="paginacion" id="paginacion">
+    <button id="btnAnterior" onclick="paginaAnterior()">Anterior</button>
+    <span id="infoPagina">Página 1 de 1</span>
+    <button id="btnSiguiente" onclick="paginaSiguiente()">Siguiente</button>
+  </div>
+</main>
+
+
+<!-- CARRITO -->
+<div id="carritoOverlay" class="carrito-overlay" onclick="cerrarCarrito()"></div>
+
+<div id="carritoPanel" class="carrito-panel">
+  <h2>Tu Pedido</h2>
+  <div id="listaCarrito"></div>
+  <div class="carrito-total">
+    Total: <span id="totalCarrito">0</span>
+  </div>
+  <button class="btn-enviar" onclick="enviarPedidoWhatsApp()">Enviar por WhatsApp</button>
+  <button class="btn-cerrar" onclick="cerrarCarrito()">Cerrar</button>
+</div>
+
+
+<!-- MODAL IMAGEN -->
+<div id="modalImagen" class="modal-imagen">
+  <span class="cerrar-modal" onclick="cerrarModal()">×</span>
+  <img id="imagenGrande">
+</div>
+
+
+<!-- ESTUDIO CREATIVO -->
+<section id="estudioCreativo">
+  <div class="estudioCreativo">
+  <p>¿Buscas un diseño a tu medida? Personaliza tus prendas con diseños exclusivos  |   Foxlab Estudio Creativo 👉   </p>
+  <button onclick="window.open('https://wa.me/573126161008?text=Hola%20Foxlab%20👋%20quiero%20personalizar%20una%20prenda','_blank')">
+    Personalizar ahora
+  </button>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="footer-content">
+    <img src="/assets/logof.png" alt="Foxlab Logo" class="footer-logo">
+    <p>© 2026 Foxlab Co. Todos los derechos reservados.</p>
+    <p class="credito">Website desarrollado por Foxlab Studio</p>
+  </div>
+</footer>
+<div id="toast" class="toast">Producto agregado al carrito 🛒</div>
+<script src="script.js"></script>
+
+</body>
+</html>
