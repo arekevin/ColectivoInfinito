@@ -14,6 +14,13 @@ let paginaActual = 1;
 const productosPorPagina = 10;
 
 /* ============================= */
+/* MODAL VARIABLES */
+/* ============================= */
+
+let imagenBase = "";
+let indexImagen = 0;
+
+/* ============================= */
 /* UTILIDADES */
 /* ============================= */
 
@@ -27,6 +34,13 @@ function guardarCarrito() {
 function limpiarTexto(texto) {
   return texto?.trim().toLowerCase();
 }
+
+/* cerrar modal al hacer click fuera */
+$("modalImagen").addEventListener("click", function(e){
+  if(e.target.id === "modalImagen"){
+    cerrarModal();
+  }
+});
 
 /* ============================= */
 /* CARGAR PRODUCTOS */
@@ -61,12 +75,10 @@ async function fetchProductos() {
 
 function mostrarProductos(coleccion = "todas", boton = null) {
 
- document.getElementById("estudioCreativo").style.display = "none";
-
-  // 🔥 Manejar botón activo
+  // botones activos
   if (boton) {
-    const botones = document.querySelectorAll(".colecciones button");
-    botones.forEach(btn => btn.classList.remove("active"));
+    document.querySelectorAll(".colecciones button")
+      .forEach(btn => btn.classList.remove("active"));
     boton.classList.add("active");
   }
 
@@ -86,11 +98,11 @@ function mostrarProductos(coleccion = "todas", boton = null) {
 
 function renderPagina() {
 
-  const cont = document.getElementById("productos");
-  const paginacion = document.getElementById("paginacion");
-  const btnAnterior = document.getElementById("btnAnterior");
-  const btnSiguiente = document.getElementById("btnSiguiente");
-  const infoPagina = document.getElementById("infoPagina");
+  const cont = $("productos");
+  const paginacion = $("paginacion");
+  const btnAnterior = $("btnAnterior");
+  const btnSiguiente = $("btnSiguiente");
+  const infoPagina = $("infoPagina");
 
   cont.innerHTML = "";
 
@@ -124,22 +136,18 @@ function renderPagina() {
     cont.appendChild(card);
   });
 
-  /* ============================= */
-  /* CONTROL PAGINACIÓN PREMIUM */
-  /* ============================= */
+  /* paginación */
 
   if (totalPaginas <= 1) {
     paginacion.style.display = "none";
     return;
   } else {
-    paginacion.style.display = "flex"; // o block según tu CSS
+    paginacion.style.display = "flex";
   }
 
   infoPagina.textContent = `Página ${paginaActual} de ${totalPaginas}`;
-
   btnAnterior.disabled = paginaActual === 1;
   btnSiguiente.disabled = paginaActual === totalPaginas;
-
 }
 
 /* ============================= */
@@ -163,17 +171,72 @@ function paginaAnterior() {
 }
 
 /* ============================= */
-/* MODAL */
+/* MODAL (MEJORADO 🔥) */
 /* ============================= */
 
 function abrirModal(imgId) {
-  $("imagenGrande").src =
-    `https://res.cloudinary.com/${cloudName}/image/upload/w_1200,q_auto,f_webp/${imgId}`;
+  imagenBase = imgId;
+  indexImagen = 0;
+
+  actualizarImagenModal();
   $("modalImagen").classList.add("activo");
 }
 
 function cerrarModal() {
   $("modalImagen").classList.remove("activo");
+}
+
+function obtenerNombreImagen() {
+  return indexImagen === 0 
+    ? imagenBase 
+    : `${imagenBase}${indexImagen}`;
+}
+
+function actualizarImagenModal() {
+  const nombre = obtenerNombreImagen();
+
+  $("imagenGrande").src =
+    `https://res.cloudinary.com/${cloudName}/image/upload/w_1200,q_auto,f_webp/${nombre}`;
+}
+
+let cargando = false;
+
+function imagenSiguiente() {
+  if (cargando) return;
+  cargando = true;
+
+  const siguienteIndex = indexImagen + 1;
+
+  const nombre = siguienteIndex === 0
+    ? imagenBase
+    : `${imagenBase}${siguienteIndex}`;
+
+  const url = `https://res.cloudinary.com/${cloudName}/image/upload/${nombre}`;
+
+  const img = new Image();
+
+  img.onload = () => {
+    indexImagen = siguienteIndex;
+    $("imagenGrande").src = url;
+    cargando = false;
+  };
+
+  img.onerror = () => {
+    // 🔁 vuelve a la imagen original
+    indexImagen = 0;
+    $("imagenGrande").src =
+      `https://res.cloudinary.com/${cloudName}/image/upload/${imagenBase}`;
+    cargando = false;
+  };
+
+  img.src = url;
+}
+
+function imagenAnterior() {
+  if (indexImagen === 0) return;
+
+  indexImagen--;
+  actualizarImagenModal();
 }
 
 /* ============================= */
@@ -184,9 +247,11 @@ function agregarAlCarrito(producto, boton) {
 
   const existente = carrito.find(p => p.id === producto.id);
 
-  existente
-    ? existente.cantidad++
-    : carrito.push({ ...producto, cantidad: 1 });
+  if (existente) {
+    existente.cantidad++;
+  } else {
+    carrito.push({ ...producto, cantidad: 1 });
+  }
 
   guardarCarrito();
   actualizarCarritoUI();
@@ -217,7 +282,11 @@ function cambiarCantidad(id, cambio) {
   if (!item) return;
 
   item.cantidad += cambio;
-  if (item.cantidad <= 0) eliminarProducto(id);
+
+  if (item.cantidad <= 0) {
+    eliminarProducto(id);
+    return;
+  }
 
   guardarCarrito();
   actualizarCarritoUI();
@@ -234,6 +303,7 @@ function actualizarCarritoUI() {
   const totalSpan = $("totalCarrito");
 
   lista.innerHTML = "";
+
   let total = 0;
   let totalItems = 0;
 
@@ -248,11 +318,13 @@ function actualizarCarritoUI() {
         <div class="item-info">
           <h4>${item.Nombre}</h4>
           <div class="precio">${formatoPrecio(item.Precio * item.cantidad)}</div>
+
           <div class="controles-cantidad">
             <button onclick="cambiarCantidad(${item.id}, -1)">−</button>
             <span>${item.cantidad}</span>
             <button onclick="cambiarCantidad(${item.id}, 1)">+</button>
           </div>
+
           <button onclick="eliminarProducto(${item.id})">Eliminar</button>
         </div>
       </div>

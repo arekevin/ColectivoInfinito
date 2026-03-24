@@ -608,6 +608,8 @@ transform:translateY(0);
 
 body{padding-top:55px}
 
+.header h1{font-size: large;}
+
 .header{height:55px}
 
 .header-right{gap:6px}
