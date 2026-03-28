@@ -90,8 +90,7 @@ body {
   z-index: 0;
   background-image: url("https://instagram.fclo1-4.fna.fbcdn.net/v/t51.82787-15/649235926_18415954504121865_8440877274004946656_n.heic?stp=dst-jpg_e35_tt6&_nc_cat=103&ig_cache_key=Mzg0ODQwMzY4MzgyMjg4ODMwMg%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6InhwaWRzLjEwODB4MTIzNi5zZHIuQzMifQ%3D%3D&_nc_ohc=rtZY4rnFXk8Q7kNvwGBTQmX&_nc_oc=AdpRfIaUaBMjMr9gQyFE02bnmnmyqPEYVFJb063cH1BRce6qpYohUfFHn2gIx7QBySA&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.fclo1-4.fna&_nc_gid=buVCrk4b0uAtLvuXUR_QdA&_nc_ss=7a32e&oh=00_Afw4inkB9meAIPQlP4T53MgmgDd2Y4BirARVrvreFaOB_Q&oe=69CDCD05");
   background-size:cover;
-  background-position:center;
-
+  background-position:center
 }
 
 .hero-bg img {
@@ -142,6 +141,18 @@ body {
 .hero-content{
   position:relative;
   z-index:2;
+}
+
+.heroalt{
+  position: relative;
+  height: 30vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  z-index: 0;
+  background-color: #111;
 }
 
 
@@ -237,7 +248,10 @@ body {
   justify-content: center;
   gap: 20px;
 }
-
+.material-icons{
+vertical-align: middle;
+margin-right: 8px;
+}
 .contacto img{
   width: 300px;
 }
