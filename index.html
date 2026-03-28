@@ -1,77 +1,128 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
+  <title>Colectivo Teatral Infinito</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Foxlab Group</title>
+  <meta name="description" content="Programación, talleres y experiencias del Colectivo Teatral Infinito.">
+
   <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="favicon.ico">
 </head>
 
-<body class="bodyhome">
+<body>
 
-<!-- HERO -->
-<section class="hero">
+  <!-- ================= HEADER ================= -->
+  <header class="header">
+      <!-- BOTÓN HAMBURGUESA -->
+    <div id="menu-toggle" class="menu-toggle">
+      ☰
+    </div>
+    <!-- LOGO  -->
+    <a href="index.html" class="header-left">
+      <img src="assets/logo.png" alt="Logo CTI" class="logo">
+    </a>
 
-  <img src="assets/logoh.png" alt="Logo Foxlab" class="logoh">
+    <!-- NAV -->
+    <nav id="nav" class="navbari">
+      <ul class="navi">
+        <li><a href="#">Nosotros</a></li>
+        <li><a href="#">Talleres</a></li>
+        <li><a href="#">Escuela</a></li>
+        <li><a href="#programacion">Programación</a></li>
+        <li><a href="#">Sala</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+      </ul>
+    </nav>
 
-  <h1>Foxlab Co</h1>
+    <!-- REDES -->
+    <div class="header-right">
+      <a href="https://instagram.com/colectivoteatralinfinito/" target="_blank">
+        <img src="assets/insta.png" alt="Instagram">
+      </a>
+    </div>
 
-  <p class="slogan">
-    Arte en movimiento.
-  </p>
-
-  <a href="catalogo.html" class="btn-entrar">
-    Ver catálogo
-  </a>
-
-</section>
+  </header>
 
 
-<!-- GALERÍA -->
-<section class="galeria">
+  <!-- ================= HERO ================= -->
+  <section class="hero">
 
-  <h2>Nuestras colecciones</h2>
+    <div class="hero-content">
+      <h1>Colectivo Teatral Infinito</h1>
+      <p>Historias que respiran en escena</p>
+      <a href="#programacion" class="btn-hero">Ver programación</a>
+    </div>
 
-  <div class="carrusel">
-    <img src="https://res.cloudinary.com/dvzdwcr5m/image/upload/w_1200,q_auto,f_webp/womanbottle" alt="Colección 1">
-    <img src="https://res.cloudinary.com/dvzdwcr5m/image/upload/w_1200,q_auto,f_webp/paraiso" alt="Colección 2">
-    <img src="https://res.cloudinary.com/dvzdwcr5m/image/upload/w_1200,q_auto,f_webp/maslove" alt="Colección 3">
-    <img src="https://res.cloudinary.com/dvzdwcr5m/image/upload/w_1200,q_auto,f_webp/ausente" alt="Colección 4">
+    <div class="hero-bg">
+      <img src="https://res.cloudinary.com/dvzdwcr5m/image/upload/w_1200,q_auto,f_webp/paraiso"
+        alt="Escena teatro">
+    </div>
+
+  </section>
+
+
+  <!-- ================= PROGRAMACIÓN ================= -->
+  <section id="programacion" class="programacion">
+
+    <h2>Programación Actual</h2>
+
+    <div id="grid-obras" class="grid-obras">
+      <p style="text-align:center;">Cargando programación...</p>
+    </div>
+
+  </section>
+
+<!-- ================= CONTACTO ================= -->
+<section id="contacto" class="contacto">
+  <div>
+    <a class="header-left">
+      <img src="assets/logoc.png" alt="Logo CTI">
+    </a>
   </div>
+  <div class="conti">
+    <h2>Contacto</h2>
 
-</section>
+    <div id="contentc" class="contentc">
+      <p><strong>Colectivo Teatral Infinito</strong></p>
+      <p>Cll 5B #26-46, San Fernando</p>
+      <p>Santiago de Cali, Valle del Cauca</p>
+      <p>Tel: 300 123 4567</p>
+      <p>Email: contacto@teatroinfinito.com</p>
+    </div>
+  </div>
+  </section>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="footer">
+
+    <div class="footer-content">
+      <img src="assets/logof.png" alt="Logo footer" class="footer-logo">
+      <p>© 2026 Colectivo Teatral Infinito</p>
+
+      <a href="https://wa.me/573126161008?text=Hola%20Foxlab%20👋%20quiero%20mi%20página%20web"
+        target="_blank" class="credito">
+        Website desarrollado por Foxlab Studio
+      </a>
+    </div>
+
+  </footer>
 
 
-<!-- CONCEPTO -->
-<section class="concepto">
+  <!-- ================= WHATSAPP FLOAT ================= -->
+  <a href="https://wa.me/573126161008?text=Hola%20quiero%20información%20del%20teatro"
+    class="whatsapp-float"
+    target="_blank">
 
-  <h2>Foxlab</h2>
+    <img src="assets/wapp.png" alt="WhatsApp">
 
-  <p>
-    Un laboratorio creativo donde el arte, la cultura urbana y el movimiento se convierten en identidad.
-    Cada prenda es una pieza de expresión.
-  </p>
-
-</section>
-
-
-<!-- CTA -->
-<section class="cta">
-
-  <h2>Descubre la colección</h2>
-
-  <a href="catalogo.html" class="btn-entrar grande">
-    Ver catálogo completo
   </a>
 
-</section>
 
-
-<footer>
-  <p>© 2026 Foxlab Co</p>
-</footer>
-
-<script src="home.js"></script>
+  <!-- ================= SCRIPT ================= -->
+  <script src="script.js"></script>
 
 </body>
+
 </html>

@@ -1,398 +1,153 @@
 /* ============================= */
 /* CONFIG */
 /* ============================= */
-
-const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTyStjv4icl3Pbl3_gh3_oHn3Q_79w9dN-Apsur9Pi0Ff2GbnbZo31c1JLQqOAoq_jrQ0KkhZIHN_Z1/pub?gid=0&single=true&output=csv";
+const sheetID = "1nXx_KqKu24-1GHDwmC-A5R-XmLQLxUPPBLciPC73aOc"
+const URL_JSON = `https://opensheet.elk.sh/${sheetID}/1`;
+const WHATSAPP_GLOBAL = "573126161008"; // 👈 tu número aquí
 const cloudName = "dvzdwcr5m";
-const numeroWhatsApp = "573126161008";
-
-let productosGlobal = [];
-let productosFiltrados = [];
-let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
-
-let paginaActual = 1;
-const productosPorPagina = 10;
 
 /* ============================= */
-/* MODAL VARIABLES */
+/* INIT GLOBAL */
 /* ============================= */
+document.addEventListener("DOMContentLoaded", () => {
 
-let imagenBase = "";
-let indexImagen = 0;
+  cargarObras();
+  activarScrollSuave();
+  iniciarMenu();
 
-/* ============================= */
-/* UTILIDADES */
-/* ============================= */
-
-const $ = id => document.getElementById(id);
-const formatoPrecio = num => `$${Number(num).toLocaleString()}`;
-
-function guardarCarrito() {
-  localStorage.setItem("carrito", JSON.stringify(carrito));
-}
-
-function limpiarTexto(texto) {
-  return texto?.trim().toLowerCase();
-}
-
-/* cerrar modal al hacer click fuera */
-$("modalImagen").addEventListener("click", function(e){
-  if(e.target.id === "modalImagen"){
-    cerrarModal();
-  }
 });
 
+
 /* ============================= */
-/* CARGAR PRODUCTOS */
+/* MENU */
 /* ============================= */
+function iniciarMenu(){
 
-async function fetchProductos() {
-  const res = await fetch(sheetURL);
-  const csv = await res.text();
+  const menuToggle = document.getElementById("menu-toggle");
+  const nav = document.getElementById("nav");
 
-  const lines = csv.trim().split("\n");
-  const headers = lines.shift().split(",");
+  if(!menuToggle || !nav) return;
 
-  return lines.map((line, index) => {
-    const values = line.split(",");
-    let obj = {};
+  const overlay = document.querySelector(".menu-overlay");
 
-    headers.forEach((h, i) => {
-      obj[h.trim()] = values[i]?.trim();
-    });
-
-    obj.id = index;
-    obj.Precio = parseInt(obj.Precio) || 0;
-    obj.Coleccion = limpiarTexto(obj.Coleccion);
-
-    return obj;
+  menuToggle.addEventListener("click", () => {
+    nav.classList.toggle("active");
+    overlay.classList.toggle("active");
   });
-}
 
-/* ============================= */
-/* FILTRO */
-/* ============================= */
-
-function mostrarProductos(coleccion = "todas", boton = null) {
-
-  // botones activos
-  if (boton) {
-    document.querySelectorAll(".colecciones button")
-      .forEach(btn => btn.classList.remove("active"));
-    boton.classList.add("active");
+  function cerrarMenu(){
+    nav.classList.remove("active");
+    overlay.classList.remove("active");
   }
 
-  const slug = limpiarTexto(coleccion);
+  // 👇 AQUÍ ESTÁ LA MAGIA
+  document.querySelectorAll(".navbari a").forEach(link => {
+    link.addEventListener("click", () => {
+      cerrarMenu();
+    });
+  });
 
-  productosFiltrados = slug === "todas"
-    ? productosGlobal
-    : productosGlobal.filter(p => p.Coleccion === slug);
-
-  paginaActual = 1;
-  renderPagina();
 }
+
+
+/* ============================= */
+/* CARGAR OBRAS */
+/* ============================= */
+async function cargarObras() {
+
+  const contenedor = document.getElementById("grid-obras");
+
+  if(!contenedor) return;
+
+  contenedor.innerHTML = `<p style="text-align:center;">Cargando programación...</p>`;
+
+  try {
+    const response = await fetch(URL_JSON);
+
+    if (!response.ok) throw new Error("Error al cargar JSON");
+
+    const obras = await response.json();
+
+    renderObras(obras);
+
+  } catch (error) {
+    console.error("❌ Error JSON:", error);
+
+    contenedor.innerHTML = `
+      <p style="color:red; text-align:center;">
+        Error cargando la programación 😢
+      </p>
+    `;
+  }
+}
+
 
 /* ============================= */
 /* RENDER */
 /* ============================= */
+function renderObras(obras) {
 
-function renderPagina() {
+  const contenedor = document.getElementById("grid-obras");
 
-  const cont = $("productos");
-  const paginacion = $("paginacion");
-  const btnAnterior = $("btnAnterior");
-  const btnSiguiente = $("btnSiguiente");
-  const infoPagina = $("infoPagina");
+  if (!obras || obras.length === 0) {
+    contenedor.innerHTML = `<p>No hay obras disponibles</p>`;
+    return;
+  }
 
-  cont.innerHTML = "";
+  contenedor.innerHTML = "";
 
-  const totalPaginas = Math.ceil(productosFiltrados.length / productosPorPagina);
+  obras.forEach(obra => {
 
-  const inicio = (paginaActual - 1) * productosPorPagina;
-  const fin = inicio + productosPorPagina;
+    const mensaje = `Hola, quiero reservar:
+🎭 Obra: ${obra.titulo}
+🗓️ Fecha: ${obra.fecha}`;
 
-  productosFiltrados.slice(inicio, fin).forEach(p => {
+    const linkWhatsApp = `https://wa.me/${WHATSAPP_GLOBAL}?text=${encodeURIComponent(mensaje)}`;
 
     const card = document.createElement("div");
-    card.className = "card";
+    card.classList.add("card-obra");
 
     card.innerHTML = `
-      <img 
-        src="https://res.cloudinary.com/${cloudName}/image/upload/w_600,q_auto,f_webp/${p.Imagen}" 
-        alt="${p.Nombre}" 
-        class="img-producto"
-      >
-      <h3>${p.Nombre}</h3>
-      <div class="precio">${formatoPrecio(p.Precio)}</div>
-      <button class="btn-agregar">Agregar al carrito</button>
-    `;
+      <img src="https://res.cloudinary.com/${cloudName}/image/upload/w_600,q_auto,f_webp/${obra.imagen}" alt="${obra.titulo}">
+      
+      <div class="card-content">
+        <h3>${obra.titulo}</h3>
+        <p>${obra.descripcion}</p>
+        <p class="fecha">${obra.fecha}</p>
+        <p class="autor">Autor: ${obra.autor || "No disponible"}</p>
 
-    card.querySelector(".img-producto")
-      .addEventListener("click", () => abrirModal(p.Imagen));
-
-    card.querySelector(".btn-agregar")
-      .addEventListener("click", e => agregarAlCarrito(p, e.target));
-
-    cont.appendChild(card);
-  });
-
-  /* paginación */
-
-  if (totalPaginas <= 1) {
-    paginacion.style.display = "none";
-    return;
-  } else {
-    paginacion.style.display = "flex";
-  }
-
-  infoPagina.textContent = `Página ${paginaActual} de ${totalPaginas}`;
-  btnAnterior.disabled = paginaActual === 1;
-  btnSiguiente.disabled = paginaActual === totalPaginas;
-}
-
-/* ============================= */
-/* PAGINACIÓN */
-/* ============================= */
-
-function paginaSiguiente() {
-  if (paginaActual * productosPorPagina < productosFiltrados.length) {
-    paginaActual++;
-    renderPagina();
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-}
-
-function paginaAnterior() {
-  if (paginaActual > 1) {
-    paginaActual--;
-    renderPagina();
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-}
-
-/* ============================= */
-/* MODAL (MEJORADO 🔥) */
-/* ============================= */
-
-function abrirModal(imgId) {
-  imagenBase = imgId;
-  indexImagen = 0;
-
-  actualizarImagenModal();
-  $("modalImagen").classList.add("activo");
-}
-
-function cerrarModal() {
-  $("modalImagen").classList.remove("activo");
-}
-
-function obtenerNombreImagen() {
-  return indexImagen === 0 
-    ? imagenBase 
-    : `${imagenBase}${indexImagen}`;
-}
-
-function actualizarImagenModal() {
-  const nombre = obtenerNombreImagen();
-
-  $("imagenGrande").src =
-    `https://res.cloudinary.com/${cloudName}/image/upload/w_1200,q_auto,f_webp/${nombre}`;
-}
-
-let cargando = false;
-
-function imagenSiguiente() {
-  if (cargando) return;
-  cargando = true;
-
-  const siguienteIndex = indexImagen + 1;
-
-  const nombre = siguienteIndex === 0
-    ? imagenBase
-    : `${imagenBase}${siguienteIndex}`;
-
-  const url = `https://res.cloudinary.com/${cloudName}/image/upload/${nombre}`;
-
-  const img = new Image();
-
-  img.onload = () => {
-    indexImagen = siguienteIndex;
-    $("imagenGrande").src = url;
-    cargando = false;
-  };
-
-  img.onerror = () => {
-    // 🔁 vuelve a la imagen original
-    indexImagen = 0;
-    $("imagenGrande").src =
-      `https://res.cloudinary.com/${cloudName}/image/upload/${imagenBase}`;
-    cargando = false;
-  };
-
-  img.src = url;
-}
-
-function imagenAnterior() {
-  if (indexImagen === 0) return;
-
-  indexImagen--;
-  actualizarImagenModal();
-}
-
-/* ============================= */
-/* CARRITO */
-/* ============================= */
-
-function agregarAlCarrito(producto, boton) {
-
-  const existente = carrito.find(p => p.id === producto.id);
-
-  if (existente) {
-    existente.cantidad++;
-  } else {
-    carrito.push({ ...producto, cantidad: 1 });
-  }
-
-  guardarCarrito();
-  actualizarCarritoUI();
-  animarBoton(boton);
-}
-
-function animarBoton(boton) {
-  if (!boton) return;
-
-  const texto = boton.innerText;
-  boton.innerText = "Agregado ✓";
-  boton.disabled = true;
-
-  setTimeout(() => {
-    boton.innerText = texto;
-    boton.disabled = false;
-  }, 1200);
-}
-
-function eliminarProducto(id) {
-  carrito = carrito.filter(p => p.id !== id);
-  guardarCarrito();
-  actualizarCarritoUI();
-}
-
-function cambiarCantidad(id, cambio) {
-  const item = carrito.find(p => p.id === id);
-  if (!item) return;
-
-  item.cantidad += cambio;
-
-  if (item.cantidad <= 0) {
-    eliminarProducto(id);
-    return;
-  }
-
-  guardarCarrito();
-  actualizarCarritoUI();
-}
-
-/* ============================= */
-/* UI CARRITO */
-/* ============================= */
-
-function actualizarCarritoUI() {
-
-  const lista = $("listaCarrito");
-  const contador = $("contadorCarrito");
-  const totalSpan = $("totalCarrito");
-
-  lista.innerHTML = "";
-
-  let total = 0;
-  let totalItems = 0;
-
-  carrito.forEach(item => {
-
-    total += item.Precio * item.cantidad;
-    totalItems += item.cantidad;
-
-    lista.innerHTML += `
-      <div class="item-carrito">
-        <img src="https://res.cloudinary.com/${cloudName}/image/upload/w_200,q_auto,f_webp/${item.Imagen}">
-        <div class="item-info">
-          <h4>${item.Nombre}</h4>
-          <div class="precio">${formatoPrecio(item.Precio * item.cantidad)}</div>
-
-          <div class="controles-cantidad">
-            <button onclick="cambiarCantidad(${item.id}, -1)">−</button>
-            <span>${item.cantidad}</span>
-            <button onclick="cambiarCantidad(${item.id}, 1)">+</button>
-          </div>
-
-          <button onclick="eliminarProducto(${item.id})">Eliminar</button>
-        </div>
+        <a href="${linkWhatsApp}" target="_blank" class="btn-reservar">
+          Reservar
+        </a>
       </div>
     `;
+
+    contenedor.appendChild(card);
   });
-
-  contador.textContent = totalItems;
-  totalSpan.textContent = formatoPrecio(total);
 }
 
-/* ============================= */
-/* CARRITO PANEL */
-/* ============================= */
-
-function abrirCarrito() {
-  $("carritoPanel").classList.add("activo");
-  $("carritoOverlay").classList.add("activo");
-}
-
-function cerrarCarrito() {
-  $("carritoPanel").classList.remove("activo");
-  $("carritoOverlay").classList.remove("activo");
-}
 
 /* ============================= */
-/* WHATSAPP */
+/* SCROLL SUAVE */
 /* ============================= */
+function activarScrollSuave(){
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener("click", function(e) {
+      e.preventDefault();
 
-function enviarPedidoWhatsApp() {
+      const destino = document.querySelector(this.getAttribute("href"));
 
-  if (!carrito.length) return alert("Tu carrito está vacío");
-
-  let mensaje = "Hola Foxlab Co 👋\n\nPedido:\n\n";
-  let total = 0;
-
-  carrito.forEach(item => {
-    const subtotal = item.Precio * item.cantidad;
-    total += subtotal;
-
-    mensaje += `• ${item.Nombre}\n`;
-    mensaje += `  Cantidad: ${item.cantidad}\n`;
-    mensaje += `  Subtotal: ${formatoPrecio(subtotal)}\n\n`;
+      if(destino){
+        destino.scrollIntoView({
+          behavior: "smooth"
+        });
+      }
+    });
   });
-
-  mensaje += `Total: ${formatoPrecio(total)}\n\nMi nombre es:`;
-
-  window.open(
-    `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`,
-    "_blank"
-  );
-
-  carrito = [];
-  guardarCarrito();
-  actualizarCarritoUI();
-  cerrarCarrito();
 }
 
-/* ============================= */
-/* INIT */
-/* ============================= */
 
-(async function init() {
-  try {
-    productosGlobal = await fetchProductos();
-    productosFiltrados = [...productosGlobal];
-    renderPagina();
-    actualizarCarritoUI();
-  } catch (err) {
-    console.error("Error cargando productos:", err);
-  }
-})();
+/* ============================= */
+/* DEBUG */
+/* ============================= */
+console.log("🎭 Script cargado correctamente");
