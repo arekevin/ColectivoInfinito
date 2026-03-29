@@ -46,6 +46,16 @@ function iniciarMenu(){
       cerrarMenu();
     });
   });
+    // 👉 CLICK FUERA
+  document.addEventListener("click", (e) => {
+
+    if (nav.classList.contains("active")) {
+      if (!nav.contains(e.target) && !menuToggle.contains(e.target)) {
+        cerrarMenu();
+      }
+    }
+
+  });
 
 }
 

@@ -108,7 +108,6 @@ body {
 
 .hero h1 {
   font-size: 48px;
-  margin-bottom: 10px;
 }
 
 .hero p {
@@ -175,7 +174,6 @@ body {
   gap: 30px;
 }
 
-
 /* ============================= */
 /* TARJETAS */
 /* ============================= */
@@ -185,6 +183,16 @@ body {
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   transition: var(--transition);
+}
+
+.card-other{
+  display: flex;
+  background: var(--bg-soft);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  transition: var(--transition);
+  margin: 20px;
 }
 
 .card-obra:hover {
@@ -197,8 +205,22 @@ body {
   object-fit: cover;
 }
 
+.card-other img {
+  width: 100%;
+  width: 300px;
+  object-fit: cover;
+}
+
+.card-other p{
+  text-align: left;
+}
+
 .card-content {
   padding: 20px;
+  width: 800px;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
 }
 
 .card-content h3 {
