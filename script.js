@@ -3,7 +3,7 @@
 /* ============================= */
 const sheetID = "1nXx_KqKu24-1GHDwmC-A5R-XmLQLxUPPBLciPC73aOc"
 const URL_JSON = `https://opensheet.elk.sh/${sheetID}/1`;
-const WHATSAPP_GLOBAL = "573126161008"; // 👈 tu número aquí
+const WHATSAPP_GLOBAL = "573188965356"; // 👈 tu número aquí
 const cloudName = "dvzdwcr5m";
 
 /* ============================= */
