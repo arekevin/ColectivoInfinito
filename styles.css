@@ -442,4 +442,8 @@ margin-right: 8px;
     width: 100%;            /* Asegura que el contenido use todo el ancho */
   }
 
+  .mapa{
+    width: 90%;
+  }
+
 }
